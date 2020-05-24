@@ -9,6 +9,6 @@ import 'package:flutter_cache_with_hive/services/hive_service.dart';
 import 'package:get_it/get_it.dart';
 
 void $initGetIt(GetIt g, {String environment}) {
-  g.registerLazySingleton<HiveService>(() => HiveService());
   g.registerLazySingleton<APIService>(() => APIService());
+  g.registerLazySingleton<HiveService>(() => HiveService());
 }

@@ -12,7 +12,7 @@ class HomeViewModel extends BaseViewModel {
   List<dynamic> get animeList => _animeList;
 
   final String url =
-      "https://raw.githubusercontent.com/shashiben/Flutter-todo/master/anime_data.json";
+      "https://raw.githubusercontent.com/shashiben/Flutter_cache_with_hive/master/csvjson.json";
 
   getData() async {
     print("Entered get Data()");
@@ -26,14 +26,28 @@ class HomeViewModel extends BaseViewModel {
       setBusy(true);
       var result = await apiService.fetchData(url: url);
       (result as List).map((e) {
-        print("Titleas ate:" + e["title"]["text"].toString());
+        print("Starting season is:"+e["Starting season"]);
         Anime anime = Anime(
-            genres: e["genres"],
-            studio: e["studio"],
-            startDate: e["startDate"],
-            hype: e["hype"],
-            description: e["description"],
-            title: e["title"]["text"]);
+            title: e["Title"],
+            type: e["Type"],
+            episodes: e["Episodes"],
+            status: e["Status"],
+            startDate: e["Start airing"],
+            endDate: e["End airing"],
+            startingSeason: e["Starting season"],
+            broadcastTime: e["Broadcast time"],
+            producers: e["Producers"],
+            licenses: e["Licensors"],
+            studios: e["Studios"],
+            sources: e["Sources"],
+            genres: e["Genres"],
+            duration: e["Duration"],
+            rating: e["Rating"],
+            score: e["Score"].toDouble(),
+            scoredby: e["Scored by"],
+            members: e["Members"],
+            favourites: e["Favourites"],
+            description: e["Description"]);
         _animeList.add(anime);
       }).toList();
       await hiveService.addBoxes(_animeList, "AnimeTable");
