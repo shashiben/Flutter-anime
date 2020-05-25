@@ -7,7 +7,6 @@ import 'package:google_fonts/google_fonts.dart';
 
 class Search extends SearchDelegate<String> {
   final List<dynamic> anime;
-  
 
   Search({this.anime});
   List<dynamic> filterSearch = [];
@@ -43,37 +42,61 @@ class Search extends SearchDelegate<String> {
 
   @override
   Widget buildSuggestions(BuildContext context) {
-    var _history=[];
-    for (int i=0;i<=5;i++){
-      int i=Random().nextInt(anime.length);
+    var _history = [];
+    for (int i = 0; i <= 5; i++) {
+      int i = Random().nextInt(anime.length);
       _history.add(anime[i].title);
     }
-    List<String> strList=[];
-    for (var i in anime){
+    List<String> strList = [];
+    for (var i in anime) {
       strList.add(i.title.toString());
     }
     final suggestions = query.isEmpty
         ? _history
-        : strList.where((element) => element.toLowerCase().contains(query.toLowerCase())).toList();
+        : strList
+            .where((element) =>
+                element.toLowerCase().contains(query.toLowerCase()))
+            .toList();
     return Container(
       color: backgroundColor,
       child: ListView.builder(
           itemCount: suggestions.length,
           itemBuilder: (BuildContext context, int index) {
             return new ListTile(
-              title: Text(suggestions[index],style:GoogleFonts.lato(color: Colors.white,fontSize: 16,fontWeight: FontWeight.w300)   ,),
+              leading: ClipRRect(
+                borderRadius: BorderRadius.circular(40),
+                child: CircleAvatar(
+                    backgroundColor: Colors.orange,
+                    child: Text(
+                      suggestions[index].toString().substring(0, 1),
+                      style: GoogleFonts.lobster(color: Colors.white),
+                    )),
+              ),
+              title: Text(
+                suggestions[index],
+                style: GoogleFonts.lato(
+                    color: Colors.white,
+                    fontSize: 16,
+                    fontWeight: FontWeight.w300),
+              ),
               onTap: () {
-                Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>AnimeDetails(anime: returnAnime(suggestions[index]),)));
+                Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => AnimeDetails(
+                              anime: returnAnime(suggestions[index]),
+                            )));
               },
             );
           }),
     );
   }
-  returnAnime(String title){
-    for(var i in anime){
-      if(i.title==title){
+
+  returnAnime(String title) {
+    for (var i in anime) {
+      if (i.title == title) {
         return i;
-      }   
+      }
     }
   }
 }
