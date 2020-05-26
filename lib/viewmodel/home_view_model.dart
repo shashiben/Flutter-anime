@@ -10,23 +10,28 @@ class HomeViewModel extends BaseViewModel {
 
   List<dynamic> _animeList = [];
   List<dynamic> get animeList => _animeList;
+  String _text="";
+  String get text=>_text;
 
   final String url =
       "https://raw.githubusercontent.com/shashiben/Flutter_cache_with_hive/master/csvjson.json";
 
   getData() async {
     print("Entered get Data()");
+    _text="Fetching data";
     bool exists = await hiveService.isExists(boxName: "AnimeTable");
     if (exists) {
+      _text="Fetching from hive";
+      print("Getting data from Hive");
       setBusy(true);
       _animeList = await hiveService.getBoxes("AnimeTable");
       setBusy(false);
     } else {
+      _text="Fetching from hive";
       print("Getting data from Api");
       setBusy(true);
       var result = await apiService.fetchData(url: url);
       (result as List).map((e) {
-        print("Starting season is:"+e["Starting season"]);
         Anime anime = Anime(
             title: e["Title"],
             type: e["Type"],
@@ -50,6 +55,7 @@ class HomeViewModel extends BaseViewModel {
             description: e["Description"]);
         _animeList.add(anime);
       }).toList();
+      _text="Caching data";
       await hiveService.addBoxes(_animeList, "AnimeTable");
       setBusy(false);
     }

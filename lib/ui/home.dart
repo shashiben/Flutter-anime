@@ -59,7 +59,7 @@ class _HomeState extends State<Home> {
                             );
                           }),
                     )
-                  : LoadingScreen(),
+                  : LoadingScreen(text: model.text,),
             ));
   }
 }
