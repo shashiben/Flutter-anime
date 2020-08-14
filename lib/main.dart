@@ -4,13 +4,20 @@ import 'package:flutter_cache_with_hive/ui/home.dart';
 import 'package:flutter_cache_with_hive/utils/appTheme.dart';
 import 'package:flutter_cache_with_hive/utils/locator.dart';
 import 'package:hive/hive.dart';
+import 'package:hive_flutter/hive_flutter.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:path_provider/path_provider.dart' as path_provider;
 
-void main() async{ 
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  final appDirectory=await  path_provider.getApplicationDocumentsDirectory();
-  Hive.init(appDirectory.path);
+  if (kIsWeb) {
+    await Hive.initFlutter();
+  } else {
+    final appDirectory = await path_provider.getApplicationDocumentsDirectory();
+    Hive.init(appDirectory.path);
+  }
   Hive.registerAdapter(AnimeAdapter());
+
   setupLocator();
   runApp(MyApp());
 }
@@ -22,7 +29,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: "Anime",
       theme: themeData(context),
-      home: Home(),   
+      home: Home(),
     );
   }
 }
